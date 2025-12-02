@@ -20,7 +20,7 @@ from pydantic import BaseModel
 from pypdf import PdfWriter
 import argparse
 
-from src.utils import Utils
+from utils import Utils
 from typing import Optional
 
 

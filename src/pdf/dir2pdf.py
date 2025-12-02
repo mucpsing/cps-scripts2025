@@ -59,9 +59,9 @@ def main():
         Utils.exitWithMsg("指定一个文件夹")
 
     # 注册表右键作用在目录背景上时，无法传参，使用固定参数
+    # USE_CWD：代表使用触发本脚本的工作目录作为目标目录
     if config.input_floder == "USE_CWD":
         config.input_floder = os.getcwd()
-        output_pdf = os.getcwd()
 
     target_Path = Path(config.input_floder)
     if target_Path.is_file():
