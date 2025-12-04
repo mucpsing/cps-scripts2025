@@ -18,6 +18,30 @@ import time
 from pathlib import Path
 from PIL import Image, ImageFilter
 from typing import Union, List
+import fitz
+
+
+def insert_blank_pages_after_each(input_pdf, output_pdf):
+    # 打开原始PDF
+    doc = fitz.open(input_pdf)
+
+    # 创建新的PDF文档
+    # fitz原则上每次仅进行读或者写操作，这里创建一个空实例是为了将写操作更好的独立出来处理
+    new_doc = fitz.open()
+
+    # 遍历每一页
+    for page_num in range(len(doc)):
+        # 添加原始页面
+        new_doc.insert_pdf(doc, from_page=page_num, to_page=page_num)
+
+        # 创建空白页（与原始页面相同尺寸）
+        original_page = doc[page_num]
+        blank_page = new_doc.new_page(-1, width=original_page.rect.width, height=original_page.rect.height)
+
+    # 保存新文档
+    new_doc.save(output_pdf)
+    doc.close()
+    new_doc.close()
 
 
 class Utils:
@@ -92,3 +116,9 @@ class Utils:
         print(*msg)
         time.sleep(10)
         exit()
+
+
+if __name__ == "__main__":
+    tar = r"Z:\work\2025\项目\海南省水文“十五五”建设规划\请款\第三笔\报告\第三笔发票+封面盖章.pdf"
+    out = r"Z:\work\2025\项目\海南省水文“十五五”建设规划\请款\第三笔\报告\第三笔发票+封面盖章_双面打印.pdf"
+    insert_blank_pages_after_each(tar, out)

@@ -2,24 +2,24 @@
 #
 # @Author: CPS
 # @email: 373704015@qq.com
-# @Date: 2025-12-02 16:27:08.960401
+# @Date: 2025-12-02 17:04:22.595720
 # @Last Modified by: CPS
-# @Last Modified time: 2025-12-02 16:10:34.831469
-# @file_path "W:\CPS\MyProject\projsect_persional\cps-scripts\src\pdf"
-# @Filename "word2jpg.py"
-# @Description: 功能描述
+# @Last Modified time: 2025-12-02 17:04:22.595720
+# @file_path "W:\CPS\MyProject\projsect_persional\cps-scripts\src\scripts"
+# @Filename "pdf2jpg.py"
+# @Description: 将pdf转换成A4 300DPI的jpg文件到同目录下
 #
 import os, sys
-from pathlib import Path
-from os import path
 
 sys.path.append("..")
-from utils import Utils
-import argparse
-from pydantic import BaseModel
 
-from word2pdf import convert_word_to_pdf
-from pdf2img import pdf_to_A4_300dpi
+from os import path
+from pathlib import Path
+from pydantic import BaseModel
+from pdf.pdf2img import pdf_to_A4_300dpi
+from pdf.utils import Utils
+
+import argparse
 
 
 # 单纯为了添加代码提示，需要手动与parser的变量同步更新
@@ -32,7 +32,7 @@ def configInit() -> ConfigType:
 
     parser.add_argument(
         "input_file",
-        help="要转换的word文件，仅支持docx或者doc结尾的文件",
+        help="要转换的pdf文件，仅支持docx或者doc结尾的文件",
         type=str,
     )
 
@@ -43,12 +43,17 @@ def main():
     config = configInit()
 
     targetFile = Path(config.input_file)
+    print("targetFile: ", targetFile)
 
-    if not targetFile.suffix.lower() in [".docx", ".doc"]:
+    if not targetFile.suffix.lower() in [".pdf"]:
         return print("不支持的格式文件: ", targetFile.stem)
 
     if not path.exists(targetFile):
         return print("不存在的文件: ", targetFile.stem)
+
+    output_path = path.dirname(config.input_file)
+
+    pdf_to_A4_300dpi(config.input_file, output_path)
 
 
 def test():
