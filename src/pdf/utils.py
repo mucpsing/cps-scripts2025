@@ -21,7 +21,9 @@ from typing import Union, List
 import fitz
 
 
-def insert_blank_pages_after_each(input_pdf, output_pdf):
+def insert_blank_pages_after_each(input_pdf: str, output_pdf: str):
+    """对一些只能双面打印的打印机，将PDF逐页插入空白页，可以达到单面打印的效果"""
+
     # 打开原始PDF
     doc = fitz.open(input_pdf)
 
@@ -36,7 +38,7 @@ def insert_blank_pages_after_each(input_pdf, output_pdf):
 
         # 创建空白页（与原始页面相同尺寸）
         original_page = doc[page_num]
-        blank_page = new_doc.new_page(-1, width=original_page.rect.width, height=original_page.rect.height)
+        new_doc.new_page(-1, width=original_page.rect.width, height=original_page.rect.height)
 
     # 保存新文档
     new_doc.save(output_pdf)
